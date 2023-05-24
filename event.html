@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="description" content="Website for Students at Innovation Academy Fulton County Schools">
+		<meta name="author" content="Scott Kent">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+				<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.2/css/bootstrap.min.css" integrity="sha512-rt/SrQ4UNIaGfDyEXZtNcyWvQeOq0QLygHluFQcSjaGB04IxWhal71tKuzP6K8eYXYB6vJV4pHkXcmFGGQ1/0w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+		
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.3/angular.min.js" integrity="sha512-KZmyTq3PLx9EZl0RHShHQuXtrvdJ+m35tuOiwlcZfs/rE7NZv29ygNA8SFCkMXTnYZQK2OX0Gm2qKGfvWEtRXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-animate/1.8.3/angular-animate.min.js" integrity="sha512-Vhup4/4s+jnmiFsp1Sg1/6jXncRbIBc+fKemYjq1n+nEXthmeASyaWnClWsAV5Sas7WbLMLNYYHw6TxwQE4oPQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-touch/1.8.3/angular-touch.min.js" integrity="sha512-f7nfAhahVgkfGWX/Ya3gmMaz9b2nSRI9Q3eftG+NH4W8NEOgWen8Rkv/p5ZL9WTTewoscB+dtO0YXNoJOxIv+A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.5.6/ui-bootstrap-tpls.min.js" integrity="sha512-+qNXcNMBMY6Vx1oKJbdSsPsKS+bcB2yrprqb2jysz8bYC+vPJQsNBapHpq8zvf7oNGEhCgkFLKAsIeUXSkThHg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+		<script src="https://fcsia-event.codefi.com/samples/scripts/external/json-formatter.min.js"></script>
+        <script src="https://fcsia-event.codefi.com/samples/scripts/data/event_data.js"></script>
+		<link rel="stylesheet" href="https://fcsia-event.codefi.com/samples/scripts/external/json-formatter.min.css" />
+        <style type="text/css">
+fieldset.debug {border:solid 1px blue;margin:1em;padding:1em}
+fieldset.debug legend {font-size:smaller;cursor:pointer}
+fieldset.debug pre {background-color:lightgrey;font-size:smaller;margin-top:1em;}
+		</style>
+		<style type="text/css">
+			/** Add your custom css style here **/
+		</style>
+		<title>IA :: Event Registration - 2.3 IT Flex Friday</title>
+
+	</head>
+
+	<body>
+		    <div ng-app="default">
+        <div ng-controller="defaultCtrl" class="container-fluid">
+            <!-- Begin: Shared Header -->
+            <section id="header">
+                <div id="branding">
+                    <h1 id="brand">Innovation Academy</h1>
+                </div>
+                <div id="mainMenu">
+                    <div class="top_right_menu">
+                        <div><a href="index.php">Home</a></div>
+                        <div ng-show="userSession.userName">
+                            <span class="top_right_menu_span"
+                                id="user_name">
+                                {{userSession.firstName}} {{userSession.lastName}}
+                            </span>
+                            <span class="top_right_menu_span"
+                                id="log_out_link">
+                                <a href="scripts/php/login.php?action=logout">Log Out</a>
+                            </span>
+                        </div>
+                        <div ng-hide="userSession.userName">
+                            <span class="top_right_menu_span"
+                                id="login">
+                                <a href="login.php">Log In</a>
+                            </span>
+                            <div class="top_right_menu_span"
+                                style="font-size:smaller;color:yellow;margin-top:1em"
+                                id="YourIP">
+                                Your IP: {{userSession.myIpAddress}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- End: Shared Header -->
+		<!-- Begin: Main Body -->
+		<h1>{{myEvent.name}}</h1>
+		<h2>Event Date and Time</h2>
+		<div>{{myEvent.e_date|date}}: ({{myEvent.start_time|date:'shortTime'}} - {{myEvent.end_time|date:'shortTime'}})</div>
+		<h2>Registration Window</h2>
+		<div>{{myEvent.reg_open|date}} - {{myEvent.reg_close|date}}</div>
+		<h2>Description</h2>
+		<div>{{myEvent.event_description}}</div>
+
+		<div>
+			<a href="event_attendee_register.php?id={{myEvent.id}}">Register for this Event</a>		
+		</div>
+		<div ng-show="myEvent.can_admin">
+			<a href="event_create.php?action=edit&amp;id={{myEvent.id}}">Edit</a> |
+			<a href="scripts/php/process/events.php?type=event&amp;action=delete&amp;id={{myEvent.id}}">Delete</a> |
+			<a href="event_attendee_report.php?event_id={{myEvent.id}}">Attendee Report</a>
+			<br/>
+			<a href="event_session_create.php?event_id={{myEvent.id}}">Add Session</a>
+		</div>
+
+		<!-- Begin: Main Body -->
+		<table class="table table-hover">
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>name</th>
+					<th>Description / Owner</th>
+					<th>Time</th>
+					<th ng-show="myEvent.can_admin">Admin</th>
+				</tr>
+			</thead>
+			<tbody ng-repeat="s in myEvent.sessions">
+				<tr>
+					<td>{{s.id}}</td>
+					<td>
+						<a href="event_session.php?id={{s.id}}">{{s.name}}</a>
+					</td>
+					<td>{{s.description}}</td>
+					<td>{{s.start_time|date:'shortTime'}} - {{s.end_time|date:'shortTime'}}</td>
+					<td ng-show="myEvent.can_admin">
+						<a href="event_session_create.php?action=edit&amp;id={{s.id}}">Edit</a> |
+						<a href="events.php?type=session&amp;action=delete&amp;id={{s.id}}">Delete</a> 
+					</td>
+				</tr>
+				<tr ng-hide="s.workshops">
+					<td></td>
+					<td></td>
+					<td colspan="3">
+						No workshops have been posted
+					</td>
+				</tr>
+				<tr ng-repeat="w in s.workshops">
+					<td></td>
+					<td colspan="1">{{w.name}}</td>
+					<td colspan="1">{{w.owner_first}} {{w.owner_last}}</td>
+					<td></td>
+					<td ng-show="myEvent.can_admin">
+						<a href="event_workshop_create.php?action=edit&amp;id={{w.id}}">Edit</a> |
+						<a href="scripts/php/process/events.php?type=workshop&amp;action=delete_instance&amp;session_id={{s.id}}&amp;id={{w.id}}">Delete Instance</a> 
+						<a href="scripts/php/process/events.php?type=workshop&action=delete_series&id={{w.id}}">Delete Series</a> 
+					</td>
+				</tr>
+			</tbody>
+		</table>
+
+		<!-- End: Main Body -->
+
+		<fieldset ng-if="showDebug" class="debug">
+			<legend style="font-size:smaller" ng-click="showDebug_myEvent=showDebug_myEvent?false:true">myEvent</legend>
+			<json-formatter ng-show="showDebug_myEvent" json="myEvent" open="0"></json-formatter>
+			<pre ng-show="showDebug_myEvent"><code>{{myEvent | json}} </code></pre>
+		</fieldset>
+		            <!-- Begin: Debug Footer -->
+            <p class="text-right">
+                <i class="fa fa-wrench" ng-click="showDebug=showDebug ? false : true"></i>
+            </p>
+            <fieldset ng-if="showDebug" class="debug">
+                <legend style="font-size:smaller" ng-click="showDebug_userSession=showDebug_userSession?false:true">userSession</legend>
+                <json-formatter ng-show="showDebug_userSession" json="userSession" open="1"></json-formatter>
+                <pre ng-show="showDebug_userSession"><code>{{userSession | json}} </code></pre>
+            </fieldset>
+        </div>
+    </div>
+
+		
+
+		</div>
+	</body>
+</html>
+

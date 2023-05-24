@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+	<head>
+				<meta charset="UTF-8">
+		<meta name="description" content="Website for Students at Innovation Academy Fulton County Schools">
+		<meta name="author" content="Scott Kent">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+				<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.2/css/bootstrap.min.css" integrity="sha512-rt/SrQ4UNIaGfDyEXZtNcyWvQeOq0QLygHluFQcSjaGB04IxWhal71tKuzP6K8eYXYB6vJV4pHkXcmFGGQ1/0w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+		
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.3/angular.min.js" integrity="sha512-KZmyTq3PLx9EZl0RHShHQuXtrvdJ+m35tuOiwlcZfs/rE7NZv29ygNA8SFCkMXTnYZQK2OX0Gm2qKGfvWEtRXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-animate/1.8.3/angular-animate.min.js" integrity="sha512-Vhup4/4s+jnmiFsp1Sg1/6jXncRbIBc+fKemYjq1n+nEXthmeASyaWnClWsAV5Sas7WbLMLNYYHw6TxwQE4oPQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-touch/1.8.3/angular-touch.min.js" integrity="sha512-f7nfAhahVgkfGWX/Ya3gmMaz9b2nSRI9Q3eftG+NH4W8NEOgWen8Rkv/p5ZL9WTTewoscB+dtO0YXNoJOxIv+A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.5.6/ui-bootstrap-tpls.min.js" integrity="sha512-+qNXcNMBMY6Vx1oKJbdSsPsKS+bcB2yrprqb2jysz8bYC+vPJQsNBapHpq8zvf7oNGEhCgkFLKAsIeUXSkThHg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+		<script src="https://fcsia-event.codefi.com/samples/scripts/external/json-formatter.min.js"></script>
+		<script src="https://fcsia-event.codefi.com/samples/scripts/data/eventList_data.js"></script>
+        <link rel="stylesheet" href="https://fcsia-event.codefi.com/samples/scripts/external/json-formatter.min.css" />
+        <style type="text/css">
+fieldset.debug {border:solid 1px blue;margin:1em;padding:1em}
+fieldset.debug legend {font-size:smaller;cursor:pointer}
+fieldset.debug pre {background-color:lightgrey;font-size:smaller;margin-top:1em;}
+		</style>
+		<style type="text/css">
+			/** Add your custom css style here **/
+		</style>
+		<title>IA :: Event List</title>
+	</head>
+
+	<body>
+	    <div ng-app="default">
+        <div ng-controller="defaultCtrl" class="container-fluid">
+            <!-- Begin: Shared Header -->
+            <section id="header">
+                <div id="branding">
+                    <h1 id="brand">Innovation Academy</h1>
+                </div>
+                <div id="mainMenu">
+                    <div class="top_right_menu">
+                        <div><a href="index.php">Home</a></div>
+                        <div ng-show="userSession.userName">
+                            <span class="top_right_menu_span"
+                                id="user_name">
+                                {{userSession.firstName}} {{userSession.lastName}}
+                            </span>
+                            <span class="top_right_menu_span"
+                                id="log_out_link">
+                                <a href="scripts/php/login.php?action=logout">Log Out</a>
+                            </span>
+                        </div>
+                        <div ng-hide="userSession.userName">
+                            <span class="top_right_menu_span"
+                                id="login">
+                                <a href="login.php">Log In</a>
+                            </span>
+                            <div class="top_right_menu_span"
+                                style="font-size:smaller;color:yellow;margin-top:1em"
+                                id="YourIP">
+                                Your IP: {{userSession.myIpAddress}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- End: Shared Header -->
+		<!-- Begin: Main Body -->
+		<h1>Event List</h1>
+		<div class="row" ng-repeat="eventItem in myEventList.events">
+			<div class="col-md-1 col-3">
+				<a href="event_attendee.php?id={{eventItem.id}}">Register</a>
+			</div>
+			<div class="col-md-4 col-8">
+				<a href="event.php?id={{eventItem.id}}">{{eventItem.name}}</a>	
+			</div>
+			<div class="col-md-3 col-8">{{eventItem.title}}</div>
+			<div class="col-md-1 col-2">
+				<a href="event_create.php?action=edit&amp;id={{eventItem.id}}">Edit</a>	
+			</div>
+			<div class="col-md-1 col-2">
+				<a href="events.php?type=event&amp;action=delete&amp;id={{eventItem.id}}">Delete</a>	
+			</div>
+		</div>
+
+		<!-- End: Main Body -->
+
+		<fieldset ng-if="showDebug" class="debug">
+			<legend style="font-size:smaller" ng-click="showDebug_myEventList=showDebug_myEventList?false:true">myEventList</legend>
+			<json-formatter ng-show="showDebug_myEventList" json="myEventList" open="0"></json-formatter>
+			<pre ng-show="showDebug_myEventList"><code>{{myEventList | json}} </code></pre>
+		</fieldset>
+
+		            <!-- Begin: Debug Footer -->
+            <p class="text-right">
+                <i class="fa fa-wrench" ng-click="showDebug=showDebug ? false : true"></i>
+            </p>
+            <fieldset ng-if="showDebug" class="debug">
+                <legend style="font-size:smaller" ng-click="showDebug_userSession=showDebug_userSession?false:true">userSession</legend>
+                <json-formatter ng-show="showDebug_userSession" json="userSession" open="1"></json-formatter>
+                <pre ng-show="showDebug_userSession"><code>{{userSession | json}} </code></pre>
+            </fieldset>
+        </div>
+    </div>
+
+		
+
+		</div>
+	</body>
+</html>
+

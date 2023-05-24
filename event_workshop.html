@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+	<head>
+				<meta charset="UTF-8">
+		<meta name="description" content="Website for Students at Innovation Academy Fulton County Schools">
+		<meta name="author" content="Scott Kent">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+				<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.2/css/bootstrap.min.css" integrity="sha512-rt/SrQ4UNIaGfDyEXZtNcyWvQeOq0QLygHluFQcSjaGB04IxWhal71tKuzP6K8eYXYB6vJV4pHkXcmFGGQ1/0w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+		
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.3/angular.min.js" integrity="sha512-KZmyTq3PLx9EZl0RHShHQuXtrvdJ+m35tuOiwlcZfs/rE7NZv29ygNA8SFCkMXTnYZQK2OX0Gm2qKGfvWEtRXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-animate/1.8.3/angular-animate.min.js" integrity="sha512-Vhup4/4s+jnmiFsp1Sg1/6jXncRbIBc+fKemYjq1n+nEXthmeASyaWnClWsAV5Sas7WbLMLNYYHw6TxwQE4oPQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-touch/1.8.3/angular-touch.min.js" integrity="sha512-f7nfAhahVgkfGWX/Ya3gmMaz9b2nSRI9Q3eftG+NH4W8NEOgWen8Rkv/p5ZL9WTTewoscB+dtO0YXNoJOxIv+A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.5.6/ui-bootstrap-tpls.min.js" integrity="sha512-+qNXcNMBMY6Vx1oKJbdSsPsKS+bcB2yrprqb2jysz8bYC+vPJQsNBapHpq8zvf7oNGEhCgkFLKAsIeUXSkThHg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+		<script src="https://fcsia-event.codefi.com/samples/scripts/external/json-formatter.min.js"></script>
+		<script src="https://fcsia-event.codefi.com/samples/scripts/data/event_workshop_data.js"></script>
+        <link rel="stylesheet" href="https://fcsia-event.codefi.com/samples/scripts/external/json-formatter.min.css" />
+        <style type="text/css">
+			/** Add your custom css style here **/
+		</style>
+		<title>IA :: Event Pass</title>
+	</head>
+
+	<body>
+	    <div ng-app="default">
+        <div ng-controller="defaultCtrl" class="container-fluid">
+            <!-- Begin: Shared Header -->
+            <section id="header">
+                <div id="branding">
+                    <h1 id="brand">Innovation Academy</h1>
+                </div>
+                <div id="mainMenu">
+                    <div class="top_right_menu">
+                        <div><a href="index.php">Home</a></div>
+                        <div ng-show="userSession.userName">
+                            <span class="top_right_menu_span"
+                                id="user_name">
+                                {{userSession.firstName}} {{userSession.lastName}}
+                            </span>
+                            <span class="top_right_menu_span"
+                                id="log_out_link">
+                                <a href="scripts/php/login.php?action=logout">Log Out</a>
+                            </span>
+                        </div>
+                        <div ng-hide="userSession.userName">
+                            <span class="top_right_menu_span"
+                                id="login">
+                                <a href="login.php">Log In</a>
+                            </span>
+                            <div class="top_right_menu_span"
+                                style="font-size:smaller;color:yellow;margin-top:1em"
+                                id="YourIP">
+                                Your IP: {{userSession.myIpAddress}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- End: Shared Header -->
+		<!-- Begin: Main Body -->
+		<p><a href="event_owner.php?event_id={{workshop.event_id}}">Back to Event List</a></p>
+		<h3>{{workshop.name}}</h3>
+		<p>{{workshop.session_name}} ({{workshop.session_start_time|date:'hh:mm a'}} - {{workshop.session_end_time|date:'hh:mm a'}}) on {{workshop.event_date|date:'M/d/yyyy'}}</p>
+		<div>
+			<div>{{workshop.description}}</div>
+		</div>
+		<p></p>
+		<div ng-show="userSession.accessLevel &gt; 3 || workshop.is_owner">
+            <h4>
+                Attendees ({{workshop.attendees.length}} / {{workshop.max_attendees}})
+            </h4>
+            <div>
+                <div>Owners</div>
+				{{workshop.owner_first}} {{workshop.owner_last}} ({{workshop.owner_email}})
+            </div>
+			<p></p>
+			<!-- Begin: Main Body -->
+			<table class="table-stripe table table-hover">
+				<thead>
+                    <th>Attendee</th>
+                    <th>Present</th>
+                    <th>Absent</th>
+                    <th>Tardy</th>
+                    <th>Required</th>
+                    <th>Role</th>
+                    <th>Remove</th>
+                    <th>Notes</th>
+				</thead>
+				<tbody ng-hide="workshop.attendees">
+					<tr><td colspan="8">No Attendee</td></tr>
+				</tbody>
+                <tbody ng-show="workshop.attendees">
+                    <tr ng-repeat="att in workshop.attendees">
+						<td>
+							{{att.last_name}}, {{att.first_name}}
+						</td>
+						<td>
+                            <span ng-show="att.attendance=='Present'">P</span>
+                            <span ng-hide="att.attendance=='Present'">
+                                <a href="scripts/php/process/events.php?type=workshop&amp;action=attendance&amp;value=Present&amp;attendee_id={{att.user_id}}&amp;session_id={{workshop.session_id}}&amp;workshop_id={{workshop.id}}">X</a>
+							</span>
+						</td>
+                        <td>
+                            <span ng-show="att.attendance=='Absent'">A</span>
+                            <span ng-hide="att.attendance=='Absent'">
+                                <a href="scripts/php/process/events.php?type=workshop&amp;action=attendance&amp;value=Absent&amp;attendee_id={{att.user_id}}&amp;session_id={{workshop.session_id}}&amp;workshop_id={{workshop.id}}">X</a>
+                            </span>
+                        </td>
+                        <td>
+                            <span ng-show="att.attendance=='Tardy'">T</span>
+                            <span ng-hide="att.attendance=='Tardy'">
+                                <a href="scripts/php/process/events.php?type=workshop&amp;action=attendance&amp;value=Tardy&amp;attendee_id={{att.user_id}}&amp;session_id={{workshop.session_id}}&amp;workshop_id={{workshop.id}}">X</a>
+                            </span>
+                        </td>
+                        <td>
+                            <span ng-show="att.required">Yes</span>
+                            <span ng-hide="att.required">No</span>
+                        </td>
+						<td>{{att.participate_type}}</td>
+                        <td>
+                            <a href="scripts/php/process/events.php?type=workshop&amp;action=delete_attendee&amp;entryi_id={{att.id}}&amp;session_id={{workshop.session_id}}&amp;workshop_id={{workshop.id}}">X</a>
+                        </td>
+						<td>
+                            <form name="Notes" method="post" action="scripts/php/process/events.php?type=workshop&amp;action=attendee_note&amp;attendee_id={{att.user_id}}&amp;workshop_id={{workshop.id}}&amp;session_id={{workshop.session_id}}">
+                                <input type="text" name="note" ng-model="att.note" />
+                                <input type="submit" value="Post" />
+                            </form>
+						</td>
+                    </tr>
+                </tbody>
+			</table>
+            <hr />
+			<fieldset>
+				<legend>Incomplete (to do)</legend>
+				<ul>
+					<li>no optional/required attendees multi-select form</li>
+					<li>no list of all sessions for this workshop</li>
+				</ul>
+			</fieldset>
+		<!-- End: Main Body -->
+		<fieldset ng-if="showDebug" class="debug">
+			<legend style="font-size:smaller" ng-click="showDebug_workshop=showDebug_workshop?false:true">workshop</legend>
+			<json-formatter ng-show="showDebug_workshop" json="workshop" open="0"></json-formatter>
+			<pre ng-show="showDebug_workshop"><code>{{workshop | json}} </code></pre>
+		</fieldset>
+		            <!-- Begin: Debug Footer -->
+            <p class="text-right">
+                <i class="fa fa-wrench" ng-click="showDebug=showDebug ? false : true"></i>
+            </p>
+            <fieldset ng-if="showDebug" class="debug">
+                <legend style="font-size:smaller" ng-click="showDebug_userSession=showDebug_userSession?false:true">userSession</legend>
+                <json-formatter ng-show="showDebug_userSession" json="userSession" open="1"></json-formatter>
+                <pre ng-show="showDebug_userSession"><code>{{userSession | json}} </code></pre>
+            </fieldset>
+        </div>
+    </div>
+
+		
+
+		</div>
+	</body>
+</html>
+
